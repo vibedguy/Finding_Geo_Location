@@ -3,20 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Live Location Tracker</title>
+    <title>Location Tracker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('https://media.istockphoto.com/id/1768217932/vector/multiple-destinations-gps-tracking-map-track-navigation-pins-on-street-maps-navigate-mapping.jpg?s=612x612&w=0&k=20&c=6O3Hgw29yP5KoqWduJ3EYSWgKr72ftE1fO7UVQX8ME4=');
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffffff72;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center; /* Center align content */
+        }
+
+        h1, h2, h3 {
+            margin-top: 0;
+            color: #02020ad3;
+            text-shadow: 1px 1px 1px #ffffff, /* Offset-x | Offset-y | Blur-radius | Color */
+                         -1px -1px 1px #ffffff,
+                         1px -1px 1px #ffffff,
+        }
+
+        button {
+            background-color: #31d4b6;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a0a0;
+        }
+
+        .location-details {
+            background-color: #41c5ac89; /* Background color for location details */
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 20px; /* Add some space between location details and iframe */
+        }
+
+        p {
+            color: #ffffff;
+        }
+
+        iframe {
+            display: block;
+            margin: 0 auto; /* Center align iframe */
+            border: none;
+        }
+
+        @media screen and (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <h1>Kongu Engineering College</h1>
-    <h1>Department of Information Technology</h1>
-    <h2>Cloud Computing Lab</h2>
-    <h2>Ex-9</h2>
-    <h3>21ITL134</h3>
-   
-    <!-- Button to fetch location -->
-    <button onclick="getLocation()">Get My Location</button>
-   
-    <p id="location"></p>
-   
+    <div class="container">
+        <h1>Kongu Engineering College</h1>
+        <h1>Department of Information Technology</h1>
+        <h2>Cloud Computing Lab Ex-9</h2>
+        <h3>21ITL134</h3>
+       
+        <button onclick="getLocation()">Get My Location</button><br><br>
+       
+        <div class="location-details" id="location">
+            <!-- Latitude and longitude details will be displayed here -->
+        </div>
+        
+        <iframe width="100%" height="300" src="https://thingspeak.com/channels/2518065/charts/1?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&title=Location+Tracker&type=line&xaxis=Time&yaxis=Location" frameborder="0" allowfullscreen></iframe>
+    </div> 
+
     <script>
         // Function to get current location
         function getLocation() {
@@ -26,22 +92,23 @@
                 alert("Geolocation is not supported by this browser.");
             }
         }
-       
+
         // Function to display location data
         function showPosition(position) {
             var latitude = position.coords.latitude;
             var longitude = position.coords.longitude;
-            document.getElementById("location").innerHTML = "Latitude: " + latitude + "<br>Longitude: " + longitude;
-           
+            var locationDetails = document.getElementById("location");
+            locationDetails.innerHTML = "<p>Latitude: " + latitude + "<br>Longitude: " + longitude + "</p>";
+
             // Call function to send data to ThingSpeak
             sendDataToThingSpeak(latitude, longitude);
         }
-       
+
         // Function to send data to ThingSpeak
         function sendDataToThingSpeak(latitude, longitude) {
-            var apiKey = "FQ5G5KK6K0P8WXN2"; // Replace this with your ThingSpeak API key
+            var apiKey = "V06YZIV8LBV2B9OV";
             var url = "https://api.thingspeak.com/update?api_key=" + apiKey + "&field1=" + latitude + "&field2=" + longitude;
-           
+
             // Send data using fetch API
             fetch(url)
                 .then(response => {
@@ -60,4 +127,3 @@
     </script>
 </body>
 </html>
-
